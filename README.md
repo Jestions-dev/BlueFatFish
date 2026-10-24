@@ -81,3 +81,7 @@ icons/               扩展图标
 - 表情包：外部作者绘制，作者声明免费可商用，感谢。
 - 小黄鸭音效：来自 `dsh-whale-widget`（MIT）。
 - 扩展图标：由「打招呼」表情裁切生成。
+
+## 许可
+
+代码采用 MIT（见 [LICENSE](LICENSE)）。表情包版权归原作者，音效来自 `dsh-whale-widget`（MIT）。
