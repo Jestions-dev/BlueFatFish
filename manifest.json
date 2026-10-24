@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Blue Fat Fish 新标签页",
+  "short_name": "Blue Fat Fish",
+  "version": "0.4.0",
+  "description": "蓝色大肥鱼的新标签页：蓝色 + 大肥鱼玩具箱、自定义壁纸、自定义标签，纯本地，断网也能用。",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "externally_connectable": {
+    "matches": [
+      "http://localhost/*",
+      "http://127.0.0.1/*"
+    ]
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-src 'self' https: http:;"
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  }
+}

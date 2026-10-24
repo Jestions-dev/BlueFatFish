@@ -1,0 +1,463 @@
+:root {
+  --text: #ffffff;
+  --tile-bg: rgba(255, 255, 255, 0.14);
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #05070a;
+  overflow: hidden;
+  font-family: "Segoe UI", "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 背景层 ---------- */
+.bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  /* 视频/图片加载失败时露出来的兜底底色 */
+  background:
+    radial-gradient(120% 90% at 20% 0%, #1b2a4a 0%, transparent 60%),
+    radial-gradient(100% 80% at 90% 100%, #2a1b3a 0%, transparent 55%),
+    #0a0d14;
+  transition: filter 0.25s ease;
+}
+.bg img,
+.bg video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+.bg iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+.bg .failed { display: none; }
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, var(--dim, 0));
+}
+
+/* ---------- 主舞台 ---------- */
+.stage {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 46px;
+  padding: 48px 24px;
+}
+
+.clock { text-align: center; user-select: none; }
+.clock .time {
+  font-size: 76px;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: 3px;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  font-variant-numeric: tabular-nums;
+}
+.clock .date {
+  margin-top: 12px;
+  font-size: 15px;
+  letter-spacing: 1px;
+  opacity: 0.82;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+.clock.hide { display: none; }
+.clock .date.hide { display: none; }
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  gap: 20px 24px;
+  max-width: 900px;
+}
+
+.tile {
+  pointer-events: auto;
+  width: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: var(--text);
+  outline: none;
+}
+.tile-add {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text);
+}
+.tile-add .plus {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius);
+  border: 1.5px dashed rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.tile-add:hover .plus {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.tile-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius);
+  background: var(--tile-bg);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  font-weight: 600;
+  line-height: 1.05;
+  text-shadow: none;
+  color: #fff;
+  letter-spacing: 0;
+  text-align: center;
+  word-break: break-word;
+  padding: 0 4px;
+}
+.tile:hover .tile-icon,
+.tile:focus-visible .tile-icon {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.38);
+}
+.tile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+.tile-icon.letter { color: #fff; }
+.tile-label {
+  font-size: 12px;
+  line-height: 1.2;
+  max-width: 88px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.94;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.55);
+}
+
+/* ---------- 设置按钮 ---------- */
+.gear {
+  position: fixed;
+  right: 20px;
+  bottom: 18px;
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 17px;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.2s, transform 0.3s;
+  backdrop-filter: blur(8px);
+}
+.gear:hover { opacity: 1; transform: rotate(45deg); }
+
+/* ---------- 抽屉 ---------- */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  width: 400px;
+  max-width: 92vw;
+  display: flex;
+  flex-direction: column;
+  background: rgba(20, 21, 26, 0.94);
+  backdrop-filter: blur(22px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  transform: translateX(102%);
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.45);
+}
+.drawer.open { transform: none; }
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.icon-btn {
+  border: 0;
+  background: transparent;
+  color: #bbb;
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+}
+.icon-btn:hover { color: #fff; }
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 18px 28px;
+}
+
+.drawer-foot {
+  padding: 10px 18px 14px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: #5c626c;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sec { padding: 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.sec:last-child { border-bottom: 0; }
+.sec h3 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #9aa0aa;
+  text-transform: uppercase;
+}
+
+.row { display: flex; gap: 8px; align-items: center; }
+.row.spaced { margin-top: 10px; }
+
+input[type="text"],
+select {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eee;
+  font-size: 12px;
+  outline: none;
+}
+input[type="text"]:focus,
+select:focus { border-color: rgba(120, 170, 255, 0.55); }
+
+.btn {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #3b6cf6;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.btn:hover { background: #4d7bff; }
+.btn.ghost { background: rgba(255, 255, 255, 0.08); }
+.btn.ghost:hover { background: rgba(255, 255, 255, 0.14); }
+
+.hint {
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #7c828c;
+}
+
+.slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #b9bec7;
+}
+.slider input[type="range"] { flex: 1; accent-color: #3b6cf6; }
+.slider b { width: 24px; text-align: right; font-weight: 400; color: #8a909a; }
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin: 6px 0;
+  cursor: pointer;
+}
+
+/* ---------- 标签编辑列表 ---------- */
+.link-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+
+.link-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.045);
+}
+.link-row .prev {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  font-weight: 600;
+}
+.link-row .prev img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+
+.lr-fields { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.lr-iconrow { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.lr-iconrow select { flex: 0 0 92px; }
+.lr-iconrow input[type="text"] { flex: 1 1 80px; min-width: 0; }
+.lr-iconrow input[type="color"] {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.lr-iconrow .mini {
+  height: 30px;
+  padding: 0 8px;
+  font-size: 11px;
+  border-radius: 8px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ddd;
+  cursor: pointer;
+}
+.lr-iconrow .mini:hover { background: rgba(255, 255, 255, 0.18); }
+
+.lr-actions { display: flex; flex-direction: column; gap: 4px; }
+.lr-actions button {
+  width: 24px;
+  height: 22px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #c8cdd6;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+}
+.lr-actions button:hover { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.lr-actions .del:hover { background: rgba(255, 90, 90, 0.35); }
+
+.hide { display: none !important; }
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translate(-50%, 20px);
+  z-index: 40;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(30, 32, 40, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+/* ---------- 玩具箱 ---------- */
+.toys {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.toys.hide { display: none; }
+
+.toy {
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: grab;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: none;
+  will-change: transform;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+}
+.toy.grabbed {
+  cursor: grabbing;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.45));
+}
+
+/* ---------- 鱼的气泡 ---------- */
+.toy-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 6px 10px;
+  border-radius: 12px 12px 12px 4px;
+  background: rgba(18, 21, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: #eef1f6;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  max-width: 240px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+  will-change: transform;
+  backdrop-filter: blur(8px);
+}
+.toy-bubble.show { opacity: 1; }
