@@ -93,6 +93,22 @@ export async function saveConfig(config) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// 有些服务器把 ico 以 application/octet-stream 返回，所以不能只看 MIME，得看文件头
+function looksLikeImage(bytes, mime) {
+  if (/^image\//i.test(mime || '')) return true;
+  const b = bytes;
+  if (b.length >= 4 && b[0] === 0x00 && b[1] === 0x00 && b[2] === 0x01 && b[3] === 0x00) return true; // ICO
+  if (b.length >= 8 && b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) return true; // PNG
+  if (b.length >= 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return true; // JPEG
+  if (b.length >= 6 && b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46) return true; // GIF
+  if (b.length >= 12 && b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46) return true; // WEBP
+  if (b.length >= 2 && b[0] === 0x42 && b[1] === 0x4d) return true; // BMP
+  // SVG：文本开头是 <svg 或 <?xml
+  const head = String.fromCharCode(...b.slice(0, 64)).trim().toLowerCase();
+  if (head.startsWith('<svg') || head.startsWith('<?xml') || head.startsWith('<!doctype svg')) return true;
+  return false;
+}
+
 async function fetchBlob(url, timeout = 6000) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeout);
@@ -101,7 +117,8 @@ async function fetchBlob(url, timeout = 6000) {
     if (!res.ok) return null;
     const blob = await res.blob();
     if (!blob.size || blob.size > 512 * 1024) return null;
-    if (!/^image\//.test(blob.type)) return null;
+    const head = new Uint8Array(await blob.slice(0, 64).arrayBuffer());
+    if (!looksLikeImage(head, blob.type)) return null;
     return blob;
   } catch {
     return null;
