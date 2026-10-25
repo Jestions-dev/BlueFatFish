@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Blue Fat Fish 新标签页",
+  "name": "__MSG_extName__",
   "short_name": "BlueFatFish",
-  "version": "0.4.5",
-  "description": "蓝色大肥鱼的新标签页：蓝色 + 大肥鱼玩具箱、自定义壁纸、自定义标签，纯本地，断网也能用。",
+  "version": "0.5.0",
+  "description": "__MSG_extDesc__",
+  "default_locale": "en",
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },

@@ -13,6 +13,7 @@ import {
 } from './store.js';
 import { applyWallpaper, detectSource } from './wallpaper.js';
 import { createToyBox } from './toys.js';
+import { t, applyStatic, uiLocale } from './i18n.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -80,11 +81,11 @@ async function renderWallpaper() {
 
 function wallpaperLabel() {
   const w = config.wallpaper || {};
-  if (w.kind === 'toy') return '当前：玩具箱（蓝色 + 大肥鱼）';
-  if (w.kind === 'asset') return '当前：本地上传的' + (w.media === 'video' ? '视频' : '图片');
-  if (w.kind === 'web') return '当前：网页背景';
-  if (w.kind === 'embed') return '当前：视频站嵌入';
-  return '当前：' + (w.media === 'video' ? '视频链接' : '图片链接');
+  if (w.kind === 'toy') return t('curToy');
+  if (w.kind === 'asset') return t(w.media === 'video' ? 'curLocalVideo' : 'curLocalImage');
+  if (w.kind === 'web') return t('curWeb');
+  if (w.kind === 'embed') return t('curEmbed');
+  return t(w.media === 'video' ? 'curVideoLink' : 'curImageLink');
 }
 
 // ---------------- 图标 ----------------
@@ -348,7 +349,7 @@ function makeTile(link, index, layout) {
 
   const label = document.createElement('div');
   label.className = 'tile-label';
-  label.textContent = link.title || hostOf(link.url) || '未命名';
+  label.textContent = link.title || hostOf(link.url) || t('untitled');
 
   a.append(box, label);
 
@@ -397,7 +398,7 @@ function renderGrid() {
     plus.textContent = '+';
     const tip = document.createElement('span');
     tip.className = 'tile-label';
-    tip.textContent = '添加标签';
+    tip.textContent = t('addLinkShort');
     add.append(plus, tip);
     if (isFreeLayout(layout)) {
       const p = layout === 'free' ? defaultFreePos(0) : cellPos(0, 0);
@@ -414,13 +415,19 @@ function renderGrid() {
 
 // ---------------- 时钟 ----------------
 
-const WEEK = ['日', '一', '二', '三', '四', '五', '六'];
-
 function tick() {
   const d = new Date();
   const pad = (n) => String(n).padStart(2, '0');
   timeEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  dateEl.textContent = `${d.getMonth() + 1}月${d.getDate()}日 星期${WEEK[d.getDay()]}`;
+  try {
+    dateEl.textContent = new Intl.DateTimeFormat(uiLocale(), {
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long'
+    }).format(d);
+  } catch {
+    dateEl.textContent = d.toLocaleDateString();
+  }
 }
 
 function applyClockVisibility() {
@@ -432,12 +439,12 @@ function applyClockVisibility() {
 
 function greetText() {
   const h = new Date().getHours();
-  if (h < 5) return '这个点还没睡？';
-  if (h < 11) return '早上好';
-  if (h < 13) return '中午好';
-  if (h < 18) return '下午好';
-  if (h < 23) return '晚上好';
-  return '夜深了，早点睡';
+  if (h < 5) return t('greetInsomnia');
+  if (h < 11) return t('greetMorning');
+  if (h < 13) return t('greetNoon');
+  if (h < 18) return t('greetAfternoon');
+  if (h < 23) return t('greetEvening');
+  return t('greetLate');
 }
 
 // 未来的 DSH 插件通过 background.js 广播过来：随便挑一条鱼说话
@@ -513,7 +520,7 @@ function renderLinkList() {
 
     const title = document.createElement('input');
     title.type = 'text';
-    title.placeholder = '标题';
+    title.placeholder = t('phTitle');
     title.value = link.title || '';
 
     const url = document.createElement('input');
@@ -526,9 +533,9 @@ function renderLinkList() {
 
     const typeSel = document.createElement('select');
     for (const [v, t] of [
-      ['auto', '自动图标'],
-      ['text', '文字图标'],
-      ['image', '上传图标']
+      ['auto', t('iconAuto')],
+      ['text', t('iconText')],
+      ['image', t('iconUpload')]
     ]) {
       const o = document.createElement('option');
       o.value = v;
@@ -540,7 +547,7 @@ function renderLinkList() {
     const textInput = document.createElement('input');
     textInput.type = 'text';
     textInput.maxLength = 8;
-    textInput.placeholder = '文字（可多字）';
+    textInput.placeholder = t('phIconText');
     textInput.value = link.icon.text || '';
 
     const colorInput = document.createElement('input');
@@ -550,7 +557,7 @@ function renderLinkList() {
     const upBtn = document.createElement('input');
     const fileBtn = document.createElement('button');
     fileBtn.className = 'mini';
-    fileBtn.textContent = '上传';
+    fileBtn.textContent = t('upload');
     const file = document.createElement('input');
     file.type = 'file';
     file.accept = 'image/*';
@@ -643,7 +650,7 @@ function renderLinkList() {
       await saveConfig(config);
       refreshPreview();
       renderGrid();
-      toast('图标已更新');
+      toast(t('toastIconUpdated'));
     });
 
     up.addEventListener('click', async () => {
@@ -724,13 +731,13 @@ function bindSettings() {
     await saveConfig(config);
     await renderWallpaper();
     $('wallName').textContent = wallpaperLabel();
-    toast('壁纸已更新');
+    toast(t('toastWallpaperUpdated'));
     e.target.value = '';
   });
 
   $('applyWallUrl').addEventListener('click', async () => {
     const src = detectSource($('wallUrl').value);
-    if (!src) return toast('看不懂这个地址');
+    if (!src) return toast(t('toastBadUrl'));
     config.wallpaper = {
       kind: src.kind,
       media: src.media,
@@ -743,7 +750,7 @@ function bindSettings() {
     await saveConfig(config);
     await renderWallpaper();
     $('wallName').textContent = wallpaperLabel();
-    toast(src.kind === 'web' ? '已设为网页背景（被拒绝嵌入会白屏）' : '壁纸已更新');
+    toast(src.kind === 'web' ? t('toastWebWallpaper') : t('toastWallpaperUpdated'));
   });
 
   $('toyWall').addEventListener('click', async () => {
@@ -759,7 +766,7 @@ function bindSettings() {
     await saveConfig(config);
     await renderWallpaper();
     $('wallName').textContent = wallpaperLabel();
-    toast('已切换到玩具箱背景');
+    toast(t('toastToyWallpaper'));
   });
 
   $('resetWall').addEventListener('click', async () => {
@@ -767,7 +774,7 @@ function bindSettings() {
     await saveConfig(config);
     await renderWallpaper();
     $('wallName').textContent = wallpaperLabel();
-    toast('已恢复默认背景');
+    toast(t('toastWallpaperReset'));
   });
 
   const dimInput = $('wallDim');
@@ -806,7 +813,7 @@ function bindSettings() {
     await clearIconCache();
     renderGrid();
     renderLinkList();
-    toast('已清空图标缓存，正在重新抓取');
+    toast(t('toastIconRefresh'));
   });
 
   $('showClock').checked = config.clock.show;
@@ -849,7 +856,7 @@ function bindSettings() {
 
   overlayBox.checked = !!(config.toys && config.toys.overlay);
   countRange.value = String((config.toys && config.toys.count) || 0);
-  countLabel.textContent = (config.toys && config.toys.count) || '自动';
+  countLabel.textContent = (config.toys && config.toys.count) || t('auto');
 
   overlayBox.addEventListener('change', async (e) => {
     config.toys = config.toys || {};
@@ -860,7 +867,7 @@ function bindSettings() {
 
   countRange.addEventListener('input', () => {
     const v = Number(countRange.value);
-    countLabel.textContent = v ? String(v) : '自动';
+    countLabel.textContent = v ? String(v) : t('auto');
     config.toys = config.toys || {};
     config.toys.count = v;
     applyToys();
@@ -872,6 +879,8 @@ function bindSettings() {
 // ---------------- 启动 ----------------
 
 async function boot() {
+  applyStatic();
+  document.title = t('extName');
   await renderWallpaper();
   $('wallName').textContent = wallpaperLabel();
   renderGrid();

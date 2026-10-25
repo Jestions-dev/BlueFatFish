@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,70 +20,70 @@
     <section class="grid" id="grid"></section>
   </main>
 
-  <button class="gear" id="openSettings" title="设置">⚙</button>
+  <button class="gear" id="openSettings" data-i18n-title="settings">⚙</button>
 
   <aside class="drawer" id="drawer">
     <div class="drawer-head">
-      <span>设置</span>
-      <button class="icon-btn" id="closeSettings" title="关闭">×</button>
+      <span data-i18n="settings">设置</span>
+      <button class="icon-btn" id="closeSettings" data-i18n-title="close">×</button>
     </div>
 
     <div class="drawer-body">
       <section class="sec">
-        <h3>壁纸</h3>
+        <h3 data-i18n="wallpaper">壁纸</h3>
         <div class="row">
-          <button class="btn" id="pickWall">选择图片 / GIF / 视频</button>
+          <button class="btn" id="pickWall" data-i18n="pickWallpaper">选择图片 / GIF / 视频</button>
           <input type="file" id="fileInput" accept="image/*,video/*" hidden />
         </div>
-        <div class="hint" id="wallName">当前：默认背景</div>
+        <div class="hint" id="wallName" data-i18n="wallNameDefault">当前：默认背景</div>
 
         <div class="row spaced">
-          <input type="text" id="wallUrl" placeholder="图片 / 视频直链，或 B站 / YouTube 视频页，或任意网页" />
-          <button class="btn" id="applyWallUrl">应用</button>
+          <input type="text" id="wallUrl" data-i18n-ph="wallUrlPlaceholder" placeholder="图片 / 视频直链，或 B站 / YouTube 视频页，或任意网页" />
+          <button class="btn" id="applyWallUrl" data-i18n="apply">应用</button>
         </div>
-        <div class="hint">直链 → 当图片或视频；B站 / YouTube 链接 → 自动转嵌入播放器；其他网址 → 当网页背景（部分站点禁止嵌入，会白屏）</div>
+        <div class="hint" data-i18n="wallUrlHint">直链 → 当图片或视频；B站 / YouTube 链接 → 自动转嵌入播放器；其他网址 → 当网页背景（部分站点禁止嵌入，会白屏）</div>
 
-        <label class="slider"><span>压暗</span><input type="range" id="wallDim" min="0" max="80" value="0" /><b id="dimVal">0</b></label>
-        <label class="slider"><span>模糊</span><input type="range" id="wallBlur" min="0" max="30" value="0" /><b id="blurVal">0</b></label>
+        <label class="slider"><span data-i18n="dim">压暗</span><input type="range" id="wallDim" min="0" max="80" value="0" /><b id="dimVal">0</b></label>
+        <label class="slider"><span data-i18n="blur">模糊</span><input type="range" id="wallBlur" min="0" max="30" value="0" /><b id="blurVal">0</b></label>
 
         <div class="row">
-          <button class="btn ghost" id="resetWall">恢复默认背景</button>
+          <button class="btn ghost" id="resetWall" data-i18n="resetWallpaper">恢复默认背景</button>
         </div>
         <div class="row">
-          <button class="btn ghost" id="toyWall">玩具箱背景（蓝色 + 大肥鱼）</button>
+          <button class="btn ghost" id="toyWall" data-i18n="toyWallpaper">玩具箱背景（蓝色 + 大肥鱼）</button>
         </div>
       </section>
 
       <section class="sec">
-        <h3>显示</h3>
+        <h3 data-i18n="display">显示</h3>
         <div class="row">
           <select id="layoutSel">
-            <option value="center">图标：居中</option>
-            <option value="left">图标：靠左列排</option>
-            <option value="top">图标：靠上排排</option>
-            <option value="freeGrid">图标：自由网格</option>
-            <option value="free">图标：自由重叠</option>
+            <option value="center" data-i18n="layoutCenter">图标：居中</option>
+            <option value="left" data-i18n="layoutLeft">图标：靠左列排</option>
+            <option value="top" data-i18n="layoutTop">图标：靠上排排</option>
+            <option value="freeGrid" data-i18n="layoutFreeGrid">图标：自由网格</option>
+            <option value="free" data-i18n="layoutFree">图标：自由重叠</option>
           </select>
         </div>
-        <label class="slider"><span>图标大小</span><input type="range" id="iconSize" min="36" max="96" value="58" /><b id="iconSizeVal">58</b></label>
-        <label class="check"><input type="checkbox" id="showClock" /> 时钟</label>
-        <label class="check"><input type="checkbox" id="showDate" /> 日期</label>
-        <label class="check"><input type="checkbox" id="showToysOverlay" /> 自定义壁纸上也放鱼</label>
-        <label class="slider"><span>鱼数量</span><input type="range" id="toyCount" min="0" max="12" value="0" /><b id="toyCountVal">自动</b></label>
+        <label class="slider"><span data-i18n="iconSize">图标大小</span><input type="range" id="iconSize" min="36" max="96" value="58" /><b id="iconSizeVal">58</b></label>
+        <label class="check"><input type="checkbox" id="showClock" /><span data-i18n="clock">时钟</span></label>
+        <label class="check"><input type="checkbox" id="showDate" /><span data-i18n="date">日期</span></label>
+        <label class="check"><input type="checkbox" id="showToysOverlay" /><span data-i18n="toysOverlay">自定义壁纸上也放鱼</span></label>
+        <label class="slider"><span data-i18n="toyCount">鱼数量</span><input type="range" id="toyCount" min="0" max="12" value="0" /><b id="toyCountVal" data-i18n="auto">自动</b></label>
       </section>
 
       <section class="sec">
-        <h3>标签</h3>
+        <h3 data-i18n="links">标签</h3>
         <div id="linkList" class="link-list"></div>
         <div class="row">
-          <button class="btn" id="addLink">+ 添加标签</button>
-          <button class="btn ghost" id="refreshIcons">重新抓图标</button>
+          <button class="btn" id="addLink" data-i18n="addLink">+ 添加标签</button>
+          <button class="btn ghost" id="refreshIcons" data-i18n="refreshIcons">重新抓图标</button>
         </div>
       </section>
 
     </div>
 
-    <div class="drawer-foot">Blue Fat Fish · 本地版</div>
+    <div class="drawer-foot" data-i18n="footer">Blue Fat Fish · 本地版</div>
   </aside>
 
   <div class="toast" id="toast"></div>

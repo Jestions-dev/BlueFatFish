@@ -1,0 +1,202 @@
+{
+  "extName": {
+    "message": "Blue Fat Fish 新标签页",
+    "description": "扩展名称"
+  },
+  "extDesc": {
+    "message": "蓝色大肥鱼的新标签页：蓝色 + 大肥鱼玩具箱、自定义壁纸、自定义标签，纯本地，断网也能用。",
+    "description": "简短描述"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "wallpaper": {
+    "message": "壁纸"
+  },
+  "pickWallpaper": {
+    "message": "选择图片 / GIF / 视频"
+  },
+  "wallUrlPlaceholder": {
+    "message": "图片 / 视频直链，或 B站 / YouTube 视频页，或任意网页"
+  },
+  "apply": {
+    "message": "应用"
+  },
+  "wallUrlHint": {
+    "message": "直链 → 当图片或视频；B站 / YouTube 链接 → 自动转嵌入播放器；其他网址 → 当网页背景（部分站点禁止嵌入，会白屏）。"
+  },
+  "dim": {
+    "message": "压暗"
+  },
+  "blur": {
+    "message": "模糊"
+  },
+  "resetWallpaper": {
+    "message": "恢复默认背景"
+  },
+  "toyWallpaper": {
+    "message": "玩具箱背景（蓝色 + 大肥鱼）"
+  },
+  "wallNameDefault": {
+    "message": "当前：默认背景"
+  },
+  "display": {
+    "message": "显示"
+  },
+  "layoutCenter": {
+    "message": "图标：居中"
+  },
+  "layoutLeft": {
+    "message": "图标：靠左列排"
+  },
+  "layoutTop": {
+    "message": "图标：靠上排排"
+  },
+  "layoutFreeGrid": {
+    "message": "图标：自由网格"
+  },
+  "layoutFree": {
+    "message": "图标：自由重叠"
+  },
+  "iconSize": {
+    "message": "图标大小"
+  },
+  "clock": {
+    "message": "时钟"
+  },
+  "date": {
+    "message": "日期"
+  },
+  "toysOverlay": {
+    "message": "自定义壁纸上也放鱼"
+  },
+  "toyCount": {
+    "message": "鱼数量"
+  },
+  "auto": {
+    "message": "自动"
+  },
+  "links": {
+    "message": "标签"
+  },
+  "addLink": {
+    "message": "+ 添加标签"
+  },
+  "refreshIcons": {
+    "message": "重新抓图标"
+  },
+  "footer": {
+    "message": "Blue Fat Fish · 本地版"
+  },
+  "curToy": {
+    "message": "当前：玩具箱（蓝色 + 大肥鱼）"
+  },
+  "curLocalImage": {
+    "message": "当前：本地上传的图片"
+  },
+  "curLocalVideo": {
+    "message": "当前：本地上传的视频"
+  },
+  "curVideoLink": {
+    "message": "当前：视频链接"
+  },
+  "curImageLink": {
+    "message": "当前：图片链接"
+  },
+  "curWeb": {
+    "message": "当前：网页背景"
+  },
+  "curEmbed": {
+    "message": "当前：视频站嵌入"
+  },
+  "toastWallpaperUpdated": {
+    "message": "壁纸已更新"
+  },
+  "toastBadUrl": {
+    "message": "看不懂这个地址"
+  },
+  "toastWebWallpaper": {
+    "message": "已设为网页背景（被拒绝嵌入会白屏）"
+  },
+  "toastWallpaperReset": {
+    "message": "已恢复默认背景"
+  },
+  "toastToyWallpaper": {
+    "message": "已切换到玩具箱背景"
+  },
+  "toastIconUpdated": {
+    "message": "图标已更新"
+  },
+  "toastIconRefresh": {
+    "message": "已清空图标缓存，正在重新抓取"
+  },
+  "phTitle": {
+    "message": "标题"
+  },
+  "phUrl": {
+    "message": "https://"
+  },
+  "phIconText": {
+    "message": "文字（可多字）"
+  },
+  "iconAuto": {
+    "message": "自动图标"
+  },
+  "iconText": {
+    "message": "文字图标"
+  },
+  "iconUpload": {
+    "message": "上传图标"
+  },
+  "upload": {
+    "message": "上传"
+  },
+  "untitled": {
+    "message": "未命名"
+  },
+  "pinchMe": {
+    "message": "捏我"
+  },
+  "bubbleHuh": {
+    "message": "嗯？"
+  },
+  "bubbleHere": {
+    "message": "在的"
+  },
+  "bubbleWhat": {
+    "message": "怎么了"
+  },
+  "bubbleNoPoke": {
+    "message": "别戳我"
+  },
+  "bubbleSigh": {
+    "message": "呼……"
+  },
+  "bubbleSqueak": {
+    "message": "叽！"
+  },
+  "greetMorning": {
+    "message": "早上好"
+  },
+  "greetNoon": {
+    "message": "中午好"
+  },
+  "greetAfternoon": {
+    "message": "下午好"
+  },
+  "greetEvening": {
+    "message": "晚上好"
+  },
+  "greetLate": {
+    "message": "夜深了，早点睡"
+  },
+  "greetInsomnia": {
+    "message": "这个点还没睡？"
+  },
+  "addLinkShort": {
+    "message": "添加标签"
+  }
+}

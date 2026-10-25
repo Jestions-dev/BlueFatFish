@@ -1,0 +1,202 @@
+{
+  "extName": {
+    "message": "Blue Fat Fish",
+    "description": "Extension name"
+  },
+  "extDesc": {
+    "message": "A new tab page with a blue toy box full of bouncing fish, plus custom wallpapers and shortcuts. Everything stays on your device.",
+    "description": "Short description"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "wallpaper": {
+    "message": "Wallpaper"
+  },
+  "pickWallpaper": {
+    "message": "Choose image / GIF / video"
+  },
+  "wallUrlPlaceholder": {
+    "message": "Direct image / video link, Bilibili / YouTube video page, or any web page"
+  },
+  "apply": {
+    "message": "Apply"
+  },
+  "wallUrlHint": {
+    "message": "Direct link → image or video; Bilibili / YouTube link → embedded player; any other URL → web page background (some sites refuse to be embedded and stay blank)."
+  },
+  "dim": {
+    "message": "Dim"
+  },
+  "blur": {
+    "message": "Blur"
+  },
+  "resetWallpaper": {
+    "message": "Reset to default"
+  },
+  "toyWallpaper": {
+    "message": "Toy box (blue + fish)"
+  },
+  "wallNameDefault": {
+    "message": "Current: default"
+  },
+  "display": {
+    "message": "Display"
+  },
+  "layoutCenter": {
+    "message": "Icons: centered"
+  },
+  "layoutLeft": {
+    "message": "Icons: left columns"
+  },
+  "layoutTop": {
+    "message": "Icons: top rows"
+  },
+  "layoutFreeGrid": {
+    "message": "Icons: free grid"
+  },
+  "layoutFree": {
+    "message": "Icons: free overlap"
+  },
+  "iconSize": {
+    "message": "Icon size"
+  },
+  "clock": {
+    "message": "Clock"
+  },
+  "date": {
+    "message": "Date"
+  },
+  "toysOverlay": {
+    "message": "Also show fish on custom wallpapers"
+  },
+  "toyCount": {
+    "message": "Fish count"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "links": {
+    "message": "Shortcuts"
+  },
+  "addLink": {
+    "message": "+ Add shortcut"
+  },
+  "refreshIcons": {
+    "message": "Refresh icons"
+  },
+  "footer": {
+    "message": "Blue Fat Fish · Local"
+  },
+  "curToy": {
+    "message": "Current: toy box (blue + fish)"
+  },
+  "curLocalImage": {
+    "message": "Current: local image"
+  },
+  "curLocalVideo": {
+    "message": "Current: local video"
+  },
+  "curVideoLink": {
+    "message": "Current: video link"
+  },
+  "curImageLink": {
+    "message": "Current: image link"
+  },
+  "curWeb": {
+    "message": "Current: web page"
+  },
+  "curEmbed": {
+    "message": "Current: embedded video"
+  },
+  "toastWallpaperUpdated": {
+    "message": "Wallpaper updated"
+  },
+  "toastBadUrl": {
+    "message": "Can't read that address"
+  },
+  "toastWebWallpaper": {
+    "message": "Set as web page background (blank if the site refuses to be embedded)"
+  },
+  "toastWallpaperReset": {
+    "message": "Default wallpaper restored"
+  },
+  "toastToyWallpaper": {
+    "message": "Switched to toy box"
+  },
+  "toastIconUpdated": {
+    "message": "Icon updated"
+  },
+  "toastIconRefresh": {
+    "message": "Icon cache cleared, refetching"
+  },
+  "phTitle": {
+    "message": "Title"
+  },
+  "phUrl": {
+    "message": "https://"
+  },
+  "phIconText": {
+    "message": "Text (up to 8 chars)"
+  },
+  "iconAuto": {
+    "message": "Auto icon"
+  },
+  "iconText": {
+    "message": "Text icon"
+  },
+  "iconUpload": {
+    "message": "Upload icon"
+  },
+  "upload": {
+    "message": "Upload"
+  },
+  "untitled": {
+    "message": "Untitled"
+  },
+  "pinchMe": {
+    "message": "Pinch me"
+  },
+  "bubbleHuh": {
+    "message": "Hm?"
+  },
+  "bubbleHere": {
+    "message": "I'm here"
+  },
+  "bubbleWhat": {
+    "message": "What?"
+  },
+  "bubbleNoPoke": {
+    "message": "Don't poke me"
+  },
+  "bubbleSigh": {
+    "message": "Phew…"
+  },
+  "bubbleSqueak": {
+    "message": "Squeak!"
+  },
+  "greetMorning": {
+    "message": "Good morning"
+  },
+  "greetNoon": {
+    "message": "Good afternoon"
+  },
+  "greetAfternoon": {
+    "message": "Good afternoon"
+  },
+  "greetEvening": {
+    "message": "Good evening"
+  },
+  "greetLate": {
+    "message": "It's late, get some sleep"
+  },
+  "greetInsomnia": {
+    "message": "Still up?"
+  },
+  "addLinkShort": {
+    "message": "Add shortcut"
+  }
+}

@@ -11,6 +11,8 @@ const AIR_DRAG = 0.5;
 const STOP_BELOW = 7;
 const TAP_SLOP = 8;
 
+import { t } from './i18n.js';
+
 const SFX_QUACK = 'assets/sfx/quack.mp3';
 
 function rand(min, max) {
@@ -85,7 +87,7 @@ export async function createToyBox(layerEl, { count = 10 } = {}) {
   const special = items.length ? items[(Math.random() * items.length) | 0] : null;
   if (special) {
     special.el.dataset.special = '1';
-    special.el.title = '捏我';
+    special.el.title = t('pinchMe');
   }
 
   let quackAudio = null;
@@ -174,7 +176,7 @@ export async function createToyBox(layerEl, { count = 10 } = {}) {
       it.vy = 0;
       if (it === special) {
         quack();
-        say(it, '叽！', 1600);
+        say(it, t('bubbleSqueak'), 1600);
       }
     } else if (dt > 0.008) {
       it.vx = clamp((last.x - first.x) / dt);
