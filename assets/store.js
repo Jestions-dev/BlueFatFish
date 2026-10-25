@@ -134,8 +134,8 @@ async function fetchHtml(url, timeout = 6000) {
     const res = await fetch(url, { signal: ctrl.signal, credentials: 'omit', redirect: 'follow' });
     if (!res.ok) return null;
     const ct = res.headers.get('content-type') || '';
-    if (!/text\/html/i.test(ct)) return null;
-    return await res.text();
+    if (!/text\/html|application\/xhtml/i.test(ct)) return null;
+    return { html: await res.text(), url: res.url || url };
   } catch {
     return null;
   } finally {
@@ -143,21 +143,59 @@ async function fetchHtml(url, timeout = 6000) {
   }
 }
 
-function pickIconHrefs(html, base) {
-  const out = [];
+async function fetchJson(url, timeout = 5000) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const res = await fetch(url, { signal: ctrl.signal, credentials: 'omit', redirect: 'follow' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function parseSize(tag) {
+  const m = tag.match(/\bsizes\s*=\s*["']([^"']+)["']/i);
+  if (!m) return 0;
+  let best = 0;
+  for (const part of m[1].split(/\s+/)) {
+    const n = parseInt(part, 10);
+    if (Number.isFinite(n) && n > best) best = n;
+  }
+  return best;
+}
+
+// 从 HTML 里收图标链接（大的优先），顺带把 web app manifest 找出来
+function collectLinks(html, base) {
+  const icons = [];
+  let manifest = '';
   const re = /<link\b[^>]*>/gi;
   let m;
-  while ((m = re.exec(html)) && out.length < 8) {
+  while ((m = re.exec(html))) {
     const tag = m[0];
-    const rel = (tag.match(/\brel\s*=\s*["']([^"']+)["']/i) || [])[1] || '';
-    if (!/icon/i.test(rel)) continue;
+    const rel = ((tag.match(/\brel\s*=\s*["']([^"']+)["']/i) || [])[1] || '').toLowerCase();
     const href = (tag.match(/\bhref\s*=\s*["']([^"']+)["']/i) || [])[1];
     if (!href || /^data:/i.test(href)) continue;
+
+    let abs;
     try {
-      out.push(new URL(href, base).href);
-    } catch {}
+      abs = new URL(href, base).href;
+    } catch {
+      continue;
+    }
+
+    if (rel.includes('manifest')) {
+      manifest = manifest || abs;
+      continue;
+    }
+    if (!/icon/.test(rel)) continue;
+    icons.push({ href: abs, size: parseSize(tag) });
   }
-  return out;
+  icons.sort((a, b) => b.size - a.size);
+  return { icons: icons.map((i) => i.href), manifest };
 }
 
 // 常见顶级后缀，用来把 a.b.example.com 收敛到 example.com
@@ -174,9 +212,28 @@ function rootOrigin(u) {
   return `${u.protocol}//${tail}`;
 }
 
+// 页面里没写 <link rel=icon> 时的兜底路径，按常见程度排
+const FILE_CANDIDATES = [
+  '/favicon.ico',
+  '/favicon.png',
+  '/favicon.svg',
+  '/apple-touch-icon.png',
+  '/apple-touch-icon-precomposed.png',
+  '/logo.png',
+  '/assets/favicon.ico',
+  '/static/favicon.ico',
+  '/images/favicon.ico',
+  '/img/favicon.ico',
+  '/public/favicon.ico',
+  '/Favicon.ico'
+];
+
 /**
- * 尝试找出某个网页的图标。先看页面里的 <link rel=icon>，再退回 /favicon.ico，
- * 最后再试一次主域名（dash.cloudflare.com → cloudflare.com）。
+ * 找图标的顺序：
+ *   1. 页面 <link rel=icon|apple-touch-icon|mask-icon>（按 sizes 从大到小）
+ *   2. 页面声明的 web app manifest 里的 icons
+ *   3. 常见兜底路径（/favicon.ico、/assets/favicon.ico、/Favicon.ico …）
+ *   4. 以上都没戏时，对主域名再来一遍（dash.cloudflare.com → cloudflare.com）
  * 返回 Blob 或 null。
  */
 export async function fetchFavicon(pageUrl) {
@@ -189,58 +246,57 @@ export async function fetchFavicon(pageUrl) {
   if (!/^https?:$/.test(u.protocol)) return null;
 
   const tried = new Set();
-  const attempt = async (href) => {
-    if (!href || tried.has(href)) return null;
+  let budget = 22;
+
+  const attempt = async (href, timeout = 4000) => {
+    if (!href || tried.has(href) || budget <= 0) return null;
     tried.add(href);
-    return await fetchBlob(href);
+    budget--;
+    return await fetchBlob(href, timeout);
   };
 
   const origins = [u.origin];
   const root = rootOrigin(u);
   if (root && root !== u.origin) origins.push(root);
 
+  // 1) 页面里的图标链接 + manifest
   for (const origin of origins) {
-    const html = await fetchHtml(origin + '/');
-    if (html) {
-      for (const href of pickIconHrefs(html, origin + '/')) {
-        const b = await attempt(href);
+    const page = await fetchHtml(origin + '/');
+    if (!page) continue;
+    const { icons, manifest } = collectLinks(page.html, page.url || origin + '/');
+
+    for (const href of icons) {
+      const b = await attempt(href);
+      if (b) return b;
+    }
+
+    if (manifest) {
+      const mf = await fetchJson(manifest);
+      const list = Array.isArray(mf && mf.icons) ? mf.icons.slice() : [];
+      list.sort((a, b) => (parseInt(b && b.sizes, 10) || 0) - (parseInt(a && a.sizes, 10) || 0));
+      for (const ic of list) {
+        if (!ic || !ic.src) continue;
+        let abs;
+        try {
+          abs = new URL(ic.src, manifest).href;
+        } catch {
+          continue;
+        }
+        const b = await attempt(abs);
         if (b) return b;
       }
     }
   }
 
-  const files = [
-    '/favicon.ico',
-    '/favicon.png',
-    '/favicon.svg',
-    '/apple-touch-icon.png',
-    '/apple-touch-icon-precomposed.png'
-  ];
+  // 2) 常见路径
   for (const origin of origins) {
-    for (const f of files) {
+    for (const f of FILE_CANDIDATES) {
       const b = await attempt(origin + f);
       if (b) return b;
     }
   }
-  return null;
-}
 
-/** 清掉所有自动抓取的图标缓存，下次渲染会重新抓 */
-export async function clearIconCache() {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readwrite');
-    const store = tx.objectStore(STORE);
-    const req = store.openCursor();
-    req.onsuccess = () => {
-      const cur = req.result;
-      if (!cur) return;
-      if (typeof cur.key === 'string' && cur.key.startsWith('icon:')) cur.delete();
-      cur.continue();
-    };
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
+  return null;
 }
 
 export function hostOf(url) {
