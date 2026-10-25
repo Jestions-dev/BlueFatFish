@@ -299,6 +299,24 @@ export async function fetchFavicon(pageUrl) {
   return null;
 }
 
+/** 清掉所有自动抓取的图标缓存，下次渲染会重新抓 */
+export async function clearIconCache() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    const store = tx.objectStore(STORE);
+    const req = store.openCursor();
+    req.onsuccess = () => {
+      const cur = req.result;
+      if (!cur) return;
+      if (typeof cur.key === 'string' && cur.key.startsWith('icon:')) cur.delete();
+      cur.continue();
+    };
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
 export function hostOf(url) {
   try {
     return new URL(url).host;
