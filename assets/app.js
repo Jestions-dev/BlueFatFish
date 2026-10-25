@@ -232,6 +232,17 @@ function assignCells() {
   }
 }
 
+// 图标尺寸变化后，原来的列可能放不下了，整体重排一遍
+function ensureCellsFit() {
+  const { w } = cellSize();
+  const cols = Math.max(1, Math.floor((window.innerWidth - PAD_X * 2) / w));
+  if (config.links.some((l) => l.cell && l.cell.c >= cols)) {
+    for (const l of config.links) delete l.cell;
+    assignCells();
+    saveConfig(config);
+  }
+}
+
 // 目标格被占了就往外找最近的一个空格
 function nearestFreeCell(cell, self) {
   const used = new Set();
@@ -372,7 +383,10 @@ function renderGrid() {
   if (stageEl) stageEl.classList.toggle('anchored', layout !== 'center');
   gridEl.innerHTML = '';
 
-  if (layout === 'freeGrid') assignCells();
+  if (layout === 'freeGrid') {
+    ensureCellsFit();
+    assignCells();
+  }
 
   if (!config.links.length) {
     const add = document.createElement('button');
