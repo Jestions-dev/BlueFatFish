@@ -187,7 +187,97 @@ async function fillIcon(box, link) {
 
 // ---------------- 网格 ----------------
 
+function defaultFreePos(i) {
+  const cellW = 108;
+  const cellH = 112;
+  const padX = 32;
+  const padY = 112;
+  const cols = Math.max(1, Math.floor((window.innerWidth - padX * 2) / cellW));
+  return { x: padX + (i % cols) * cellW, y: padY + Math.floor(i / cols) * cellH };
+}
+
+function makeTileDraggable(tile, link) {
+  let drag = null;
+
+  tile.addEventListener('pointerdown', (e) => {
+    if (config.layout !== 'free' || e.button !== 0) return;
+    e.preventDefault();
+    const r = tile.getBoundingClientRect();
+    drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, moved: 0, x0: e.clientX, y0: e.clientY };
+    tile.setPointerCapture(e.pointerId);
+    tile.classList.add('dragging');
+  });
+
+  tile.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const x = e.clientX - drag.dx;
+    const y = e.clientY - drag.dy;
+    drag.moved = Math.max(drag.moved, Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0));
+    tile.style.left = x + 'px';
+    tile.style.top = y + 'px';
+    link.pos = { x: Math.round(x), y: Math.round(y) };
+  });
+
+  const end = () => {
+    if (!drag) return;
+    const moved = drag.moved;
+    drag = null;
+    tile.classList.remove('dragging');
+    if (moved > 3) {
+      // 同步打标记，赶在 click 之前，避免拖完松手把链接打开了
+      tile.dataset.skipClick = '1';
+      setTimeout(() => delete tile.dataset.skipClick, 400);
+      saveConfig(config);
+    }
+  };
+  tile.addEventListener('pointerup', end);
+  tile.addEventListener('pointercancel', end);
+
+  tile.addEventListener(
+    'click',
+    (e) => {
+      if (tile.dataset.skipClick) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    true
+  );
+}
+
+function makeTile(link, index, layout) {
+  const a = document.createElement('a');
+  a.className = 'tile';
+  a.href = link.url || '#';
+  a.title = link.title || link.url || '';
+  if (layout === 'free') a.draggable = false;
+
+  const box = document.createElement('div');
+  box.className = 'tile-icon';
+
+  const label = document.createElement('div');
+  label.className = 'tile-label';
+  label.textContent = link.title || hostOf(link.url) || '未命名';
+
+  a.append(box, label);
+
+  if (layout === 'free') {
+    const pos = link.pos && Number.isFinite(link.pos.x) ? link.pos : defaultFreePos(index);
+    link.pos = pos;
+    a.style.left = pos.x + 'px';
+    a.style.top = pos.y + 'px';
+    makeTileDraggable(a, link);
+  }
+
+  fillIcon(box, link);
+  return a;
+}
+
 function renderGrid() {
+  const layout = config.layout || 'center';
+  gridEl.className = 'grid ' + layout;
+  const stageEl = document.querySelector('.stage');
+  if (stageEl) stageEl.classList.toggle('anchored', layout !== 'center');
   gridEl.innerHTML = '';
 
   if (!config.links.length) {
@@ -201,28 +291,17 @@ function renderGrid() {
     tip.className = 'tile-label';
     tip.textContent = '添加标签';
     add.append(plus, tip);
+    if (layout === 'free') {
+      const pos = defaultFreePos(0);
+      add.style.left = pos.x + 'px';
+      add.style.top = pos.y + 'px';
+    }
     add.addEventListener('click', openDrawer);
     gridEl.appendChild(add);
     return;
   }
 
-  for (const link of config.links) {
-    const a = document.createElement('a');
-    a.className = 'tile';
-    a.href = link.url || '#';
-    a.title = link.title || link.url || '';
-
-    const box = document.createElement('div');
-    box.className = 'tile-icon';
-
-    const label = document.createElement('div');
-    label.className = 'tile-label';
-    label.textContent = link.title || hostOf(link.url) || '未命名';
-
-    a.append(box, label);
-    gridEl.appendChild(a);
-    fillIcon(box, link);
-  }
+  config.links.forEach((link, i) => gridEl.appendChild(makeTile(link, i, layout)));
 }
 
 // ---------------- 时钟 ----------------
@@ -629,6 +708,14 @@ function bindSettings() {
     applyClockVisibility();
     await saveConfig(config);
   });
+  const layoutSel = $('layoutSel');
+  layoutSel.value = config.layout || 'center';
+  layoutSel.addEventListener('change', async () => {
+    config.layout = layoutSel.value;
+    await saveConfig(config);
+    renderGrid();
+  });
+
   $('showDate').addEventListener('change', async (e) => {
     config.clock.date = e.target.checked;
     applyClockVisibility();

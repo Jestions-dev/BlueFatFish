@@ -461,3 +461,61 @@ select:focus { border-color: rgba(120, 170, 255, 0.55); }
   backdrop-filter: blur(8px);
 }
 .toy-bubble.show { opacity: 1; }
+
+/* ---------- 图标排列 ---------- */
+.stage.anchored {
+  display: block;
+  padding: 0;
+}
+.stage.anchored .clock {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 3;
+}
+.stage.anchored .clock .time {
+  font-size: 44px;
+  letter-spacing: 2px;
+}
+.stage.anchored .clock .date {
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.grid.left,
+.grid.top {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 106px 28px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  align-content: flex-start;
+  justify-content: flex-start;
+  max-width: none;
+  width: auto;
+}
+.grid.left { flex-direction: column; }
+.grid.left .tile,
+.grid.top .tile { height: 96px; }
+
+.grid.free {
+  position: absolute;
+  inset: 0;
+  display: block;
+  max-width: none;
+  width: auto;
+  padding: 0;
+}
+.grid.free .tile {
+  position: absolute;
+  cursor: grab;
+  touch-action: none;
+}
+.grid.free .tile.dragging {
+  cursor: grabbing;
+  z-index: 9;
+}
