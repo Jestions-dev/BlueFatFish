@@ -47,11 +47,10 @@ function fallbackText(title = '') {
 }
 
 function fitFontSize(len) {
-  if (len <= 1) return 26;
-  if (len === 2) return 22;
-  if (len === 3) return 17;
-  if (len === 4) return 13;
-  return 10;
+  const base =
+    len <= 1 ? 26 : len === 2 ? 22 : len === 3 ? 17 : len === 4 ? 13 : 10;
+  const scale = (config.iconSize || 58) / 58;
+  return Math.max(8, Math.round(base * scale));
 }
 
 function stableId() {
@@ -188,8 +187,9 @@ async function fillIcon(box, link) {
 // ---------------- 网格 ----------------
 
 function defaultFreePos(i) {
-  const cellW = 108;
-  const cellH = 112;
+  const icon = config.iconSize || 58;
+  const cellW = icon + 50;
+  const cellH = icon + 54;
   const padX = 32;
   const padY = 112;
   const cols = Math.max(1, Math.floor((window.innerWidth - padX * 2) / cellW));
@@ -273,8 +273,14 @@ function makeTile(link, index, layout) {
   return a;
 }
 
+function applyIconSize() {
+  const size = Math.max(36, Math.min(96, Number(config.iconSize) || 58));
+  document.documentElement.style.setProperty('--icon', size + 'px');
+}
+
 function renderGrid() {
   const layout = config.layout || 'center';
+  applyIconSize();
   gridEl.className = 'grid ' + layout;
   const stageEl = document.querySelector('.stage');
   if (stageEl) stageEl.classList.toggle('anchored', layout !== 'center');
@@ -708,6 +714,18 @@ function bindSettings() {
     applyClockVisibility();
     await saveConfig(config);
   });
+  const sizeRange = $('iconSize');
+  const sizeLabel = $('iconSizeVal');
+  sizeRange.value = String(config.iconSize || 58);
+  sizeLabel.textContent = sizeRange.value;
+  sizeRange.addEventListener('input', () => {
+    config.iconSize = Number(sizeRange.value);
+    sizeLabel.textContent = sizeRange.value;
+    applyIconSize();
+    renderGrid();
+  });
+  sizeRange.addEventListener('change', () => saveConfig(config));
+
   const layoutSel = $('layoutSel');
   layoutSel.value = config.layout || 'center';
   layoutSel.addEventListener('change', async () => {

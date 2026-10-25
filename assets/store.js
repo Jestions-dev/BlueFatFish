@@ -65,6 +65,7 @@ const DEFAULTS = {
   wallpaper: DEFAULT_WALLPAPER,
   clock: { show: true, date: true },
   layout: 'center',
+  iconSize: 58,
   toys: { overlay: false, count: 0 },
   links: DEFAULT_LINKS
 };
@@ -76,6 +77,7 @@ export async function loadConfig() {
     wallpaper: { ...DEFAULT_WALLPAPER, ...(config.wallpaper || {}) },
     clock: { ...DEFAULTS.clock, ...(config.clock || {}) },
     layout: config.layout || DEFAULTS.layout,
+    iconSize: Number(config.iconSize) || DEFAULTS.iconSize,
     toys: { ...DEFAULTS.toys, ...(config.toys || {}) },
     links: Array.isArray(config.links) ? config.links : structuredClone(DEFAULT_LINKS)
   };

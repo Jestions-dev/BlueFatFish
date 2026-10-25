@@ -1,4 +1,5 @@
 :root {
+  color-scheme: dark;
   --text: #ffffff;
   --tile-bg: rgba(255, 255, 255, 0.14);
   --radius: 16px;
@@ -99,7 +100,7 @@ html, body {
 
 .tile {
   pointer-events: auto;
-  width: 84px;
+  width: calc(var(--icon, 58px) + 26px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -117,14 +118,14 @@ html, body {
   color: var(--text);
 }
 .tile-add .plus {
-  width: 58px;
-  height: 58px;
+  width: var(--icon, 58px);
+  height: var(--icon, 58px);
   border-radius: var(--radius);
   border: 1.5px dashed rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: calc(var(--icon, 58px) * 0.45);
   font-weight: 300;
   color: rgba(255, 255, 255, 0.75);
   transition: border-color 0.15s, color 0.15s, transform 0.15s;
@@ -136,8 +137,8 @@ html, body {
 }
 
 .tile-icon {
-  width: 58px;
-  height: 58px;
+  width: var(--icon, 58px);
+  height: var(--icon, 58px);
   border-radius: var(--radius);
   background: var(--tile-bg);
   backdrop-filter: blur(12px);
@@ -165,13 +166,13 @@ html, body {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 6px;
+  padding: calc(var(--icon, 58px) * 0.1);
 }
 .tile-icon.letter { color: #fff; }
 .tile-label {
-  font-size: 12px;
+  font-size: calc(var(--icon, 58px) * 0.207);
   line-height: 1.2;
-  max-width: 88px;
+  max-width: calc(var(--icon, 58px) + 30px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -282,6 +283,15 @@ select {
 }
 input[type="text"]:focus,
 select:focus { border-color: rgba(120, 170, 255, 0.55); }
+
+/* 深色模式下原生下拉框的列表 */
+select {
+  color-scheme: dark;
+}
+select option {
+  background-color: #1b1d24;
+  color: #e8ebf2;
+}
 
 .btn {
   height: 32px;
@@ -500,7 +510,7 @@ select:focus { border-color: rgba(120, 170, 255, 0.55); }
 }
 .grid.left { flex-direction: column; }
 .grid.left .tile,
-.grid.top .tile { height: 96px; }
+.grid.top .tile { height: calc(var(--icon, 58px) + 38px); }
 
 .grid.free {
   position: absolute;
