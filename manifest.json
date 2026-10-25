@@ -1,10 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Blue Fat Fish 新标签页",
-  "short_name": "Blue Fat Fish",
-  "version": "0.4.4",
+  "short_name": "BlueFatFish",
+  "version": "0.4.5",
   "description": "蓝色大肥鱼的新标签页：蓝色 + 大肥鱼玩具箱、自定义壁纸、自定义标签，纯本地，断网也能用。",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvUbvSE9MbsudNDsFocj92GHagk0AdrGWTL0BLL3MqH2abpKUXdlfANIjjO7qWhq0fPKR73qS6htJ/BgZzxMsGv5fDuOEz0b4FRjsK3rro3xffaO+zGUvdwybXeZh0abqK5LoMaRDjwTANyxGcutcf/ZWn1FQR//UOscOIE+K2MiLTTukIGAFIn53sUOu3vE/y1Le3f4Lv5ySvtql0vBIXjJXvRmCazVwDafBtsL7IWtr/X/y3+Fo6dQfht0N7sqci8s/GfFx02P6ZtfhehUJNPFwDULTr9fx2VcFDtp/CBKMc/B+8gzxAPq+OFb4MXw+fipXsGIh7Q205yeiem5HnQIDAQAB",
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
