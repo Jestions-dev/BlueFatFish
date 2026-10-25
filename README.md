@@ -14,10 +14,25 @@
 
 ## 安装
 
-1. 打开 `edge://extensions/`（Chrome 是 `chrome://extensions/`）
-2. 打开 **开发人员模式**
-3. 点 **加载解压缩的扩展**，选中这个文件夹
-4. `Ctrl+T` 新开标签页
+从 [Releases](https://github.com/Jestions-dev/BlueFatFish/releases) 下载 `BlueFatFish-x.y.z.zip` 或 `.crx`。
+
+**方式一：解压加载（最稳）**
+
+1. 把 zip 解压到一个不会随手删掉的位置
+2. 打开 `edge://extensions/`（Chrome 是 `chrome://extensions/`）
+3. 打开 **开发人员模式**
+4. 点 **加载解压缩的扩展**，选中解压出来的文件夹
+5. `Ctrl+T` 新开标签页
+
+**方式二：装 crx**
+
+1. 同样先打开 **开发人员模式**
+2. 把 `.crx` 拖进扩展页面，确认安装
+
+> Edge / Chrome 对非商店来源的 crx 有拦截，装不上就用方式一，效果一样。
+
+扩展 ID 由 `manifest.json` 里的 `key` 固定，所以从 crx 装和从文件夹装是**同一个 ID**，配置可以互通。
+
 
 ## 使用
 
@@ -39,8 +54,8 @@
 扩展里有个 service worker（`background.js`），监听 `chrome.runtime.onMessageExternal`，只接受来自 `http://localhost/*` 和 `http://127.0.0.1/*` 的页面。
 
 ```js
-chrome.runtime.sendMessage('<扩展ID>', { type: 'ping' }, (res) => console.log(res));
-// { ok: true, protocol: 'bff/1', name: 'Blue Fat Fish', version: '0.4.0' }
+chrome.runtime.sendMessage('fgknaliolciojhmchpbiiojmdfakjepe', { type: 'ping' }, (res) => console.log(res));
+// { ok: true, protocol: 'bff/1', name: 'Blue Fat Fish', version: '0.4.2' }
 ```
 
 | type | 参数 | 说明 |
