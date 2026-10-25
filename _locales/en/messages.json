@@ -198,5 +198,17 @@
   },
   "addLinkShort": {
     "message": "Add shortcut"
+  },
+  "langLabel": {
+    "message": "Language"
+  },
+  "langAuto": {
+    "message": "Follow system"
+  },
+  "langZh": {
+    "message": "中文"
+  },
+  "langEn": {
+    "message": "English"
   }
 }

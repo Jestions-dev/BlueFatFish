@@ -13,7 +13,7 @@ import {
 } from './store.js';
 import { applyWallpaper, detectSource } from './wallpaper.js';
 import { createToyBox } from './toys.js';
-import { t, applyStatic, uiLocale } from './i18n.js';
+import { t, applyStatic, uiLocale, setLang } from './i18n.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -835,6 +835,14 @@ function bindSettings() {
   });
   sizeRange.addEventListener('change', () => saveConfig(config));
 
+  const langSel = $('langSel');
+  langSel.value = config.lang || 'auto';
+  langSel.addEventListener('change', async () => {
+    config.lang = langSel.value;
+    await saveConfig(config);
+    location.reload();
+  });
+
   const layoutSel = $('layoutSel');
   layoutSel.value = config.layout || 'center';
   layoutSel.addEventListener('change', async () => {
@@ -879,6 +887,7 @@ function bindSettings() {
 // ---------------- 启动 ----------------
 
 async function boot() {
+  setLang(config.lang);
   applyStatic();
   document.title = t('extName');
   await renderWallpaper();

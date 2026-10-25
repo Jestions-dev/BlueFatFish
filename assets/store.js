@@ -66,6 +66,7 @@ const DEFAULTS = {
   clock: { show: true, date: true },
   layout: 'center',
   iconSize: 58,
+  lang: 'auto',
   toys: { overlay: false, count: 0 },
   links: DEFAULT_LINKS
 };
@@ -78,6 +79,7 @@ export async function loadConfig() {
     clock: { ...DEFAULTS.clock, ...(config.clock || {}) },
     layout: config.layout || DEFAULTS.layout,
     iconSize: Number(config.iconSize) || DEFAULTS.iconSize,
+    lang: config.lang || DEFAULTS.lang,
     toys: { ...DEFAULTS.toys, ...(config.toys || {}) },
     links: Array.isArray(config.links) ? config.links : structuredClone(DEFAULT_LINKS)
   };

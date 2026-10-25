@@ -198,5 +198,17 @@
   },
   "addLinkShort": {
     "message": "添加标签"
+  },
+  "langLabel": {
+    "message": "语言"
+  },
+  "langAuto": {
+    "message": "跟随系统"
+  },
+  "langZh": {
+    "message": "中文"
+  },
+  "langEn": {
+    "message": "English"
   }
 }
