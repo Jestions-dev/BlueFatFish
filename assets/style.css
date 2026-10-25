@@ -512,7 +512,8 @@ select option {
 .grid.left .tile,
 .grid.top .tile { height: calc(var(--icon, 58px) + 38px); }
 
-.grid.free {
+.grid.free,
+.grid.freeGrid {
   position: absolute;
   inset: 0;
   display: block;
@@ -520,12 +521,18 @@ select option {
   width: auto;
   padding: 0;
 }
-.grid.free .tile {
+.grid.free .tile,
+.grid.freeGrid .tile {
   position: absolute;
   cursor: grab;
   touch-action: none;
 }
-.grid.free .tile.dragging {
+.grid.free .tile.dragging,
+.grid.freeGrid .tile.dragging {
   cursor: grabbing;
   z-index: 9;
+}
+
+.grid.freeGrid .tile.snapping {
+  transition: left 0.14s ease, top 0.14s ease;
 }

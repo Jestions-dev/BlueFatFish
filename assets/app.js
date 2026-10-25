@@ -186,21 +186,85 @@ async function fillIcon(box, link) {
 
 // ---------------- 网格 ----------------
 
-function defaultFreePos(i) {
+const PAD_X = 32;
+const PAD_Y = 112;
+
+function cellSize() {
   const icon = config.iconSize || 58;
-  const cellW = icon + 50;
-  const cellH = icon + 54;
-  const padX = 32;
-  const padY = 112;
-  const cols = Math.max(1, Math.floor((window.innerWidth - padX * 2) / cellW));
-  return { x: padX + (i % cols) * cellW, y: padY + Math.floor(i / cols) * cellH };
+  return { w: icon + 50, h: icon + 54 };
 }
 
-function makeTileDraggable(tile, link) {
+function cellKey(c, r) {
+  return c + ',' + r;
+}
+
+function cellPos(c, r) {
+  const { w, h } = cellSize();
+  return { x: PAD_X + c * w, y: PAD_Y + r * h };
+}
+
+function cellFromPos(x, y) {
+  const { w, h } = cellSize();
+  return { c: Math.round((x - PAD_X) / w), r: Math.max(0, Math.round((y - PAD_Y) / h)) };
+}
+
+function isFreeLayout(layout) {
+  return layout === 'free' || layout === 'freeGrid';
+}
+
+// 给没位置的图标分配网格单元，顺便去重
+function assignCells() {
+  const { w } = cellSize();
+  const cols = Math.max(1, Math.floor((window.innerWidth - PAD_X * 2) / w));
+  const used = new Set();
+  let next = 0;
+
+  for (const link of config.links) {
+    const c = link.cell;
+    if (c && Number.isInteger(c.c) && Number.isInteger(c.r) && !used.has(cellKey(c.c, c.r))) {
+      used.add(cellKey(c.c, c.r));
+      continue;
+    }
+    while (used.has(cellKey(next % cols, Math.floor(next / cols)))) next++;
+    link.cell = { c: next % cols, r: Math.floor(next / cols) };
+    used.add(cellKey(link.cell.c, link.cell.r));
+    next++;
+  }
+}
+
+// 目标格被占了就往外找最近的一个空格
+function nearestFreeCell(cell, self) {
+  const used = new Set();
+  for (const l of config.links) {
+    if (l !== self && l.cell) used.add(cellKey(l.cell.c, l.cell.r));
+  }
+  if (!used.has(cellKey(cell.c, cell.r))) return cell;
+
+  for (let radius = 1; radius < 40; radius++) {
+    for (let dr = -radius; dr <= radius; dr++) {
+      for (let dc = -radius; dc <= radius; dc++) {
+        if (Math.max(Math.abs(dc), Math.abs(dr)) !== radius) continue;
+        const c = cell.c + dc;
+        const r = cell.r + dr;
+        if (r < 0) continue;
+        if (!used.has(cellKey(c, r))) return { c, r };
+      }
+    }
+  }
+  return cell;
+}
+
+function defaultFreePos(i) {
+  const { w, h } = cellSize();
+  const cols = Math.max(1, Math.floor((window.innerWidth - PAD_X * 2) / w));
+  return { x: PAD_X + (i % cols) * w, y: PAD_Y + Math.floor(i / cols) * h };
+}
+
+function makeTileDraggable(tile, link, layout) {
   let drag = null;
 
   tile.addEventListener('pointerdown', (e) => {
-    if (config.layout !== 'free' || e.button !== 0) return;
+    if (!isFreeLayout(config.layout) || e.button !== 0) return;
     e.preventDefault();
     const r = tile.getBoundingClientRect();
     drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, moved: 0, x0: e.clientX, y0: e.clientY };
@@ -215,7 +279,6 @@ function makeTileDraggable(tile, link) {
     drag.moved = Math.max(drag.moved, Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0));
     tile.style.left = x + 'px';
     tile.style.top = y + 'px';
-    link.pos = { x: Math.round(x), y: Math.round(y) };
   });
 
   const end = () => {
@@ -223,13 +286,30 @@ function makeTileDraggable(tile, link) {
     const moved = drag.moved;
     drag = null;
     tile.classList.remove('dragging');
-    if (moved > 3) {
-      // 同步打标记，赶在 click 之前，避免拖完松手把链接打开了
-      tile.dataset.skipClick = '1';
-      setTimeout(() => delete tile.dataset.skipClick, 400);
+    if (moved <= 3) return;
+
+    tile.dataset.skipClick = '1';
+    setTimeout(() => delete tile.dataset.skipClick, 400);
+
+    if (layout === 'free') {
+      link.pos = { x: Math.round(parseFloat(tile.style.left) || 0), y: Math.round(parseFloat(tile.style.top) || 0) };
+    } else {
+      const drop = cellFromPos(parseFloat(tile.style.left) || 0, parseFloat(tile.style.top) || 0);
+      const oldCell = link.cell;
+      const occupant = config.links.find(
+        (l) => l !== link && l.cell && l.cell.c === drop.c && l.cell.r === drop.r
+      );
+      link.cell = drop;
+      // 目标格有人：两个换位置，而不是把对方挤走
+      if (occupant && oldCell) occupant.cell = oldCell;
       saveConfig(config);
+      renderGrid();
+      return;
     }
+
+    saveConfig(config);
   };
+
   tile.addEventListener('pointerup', end);
   tile.addEventListener('pointercancel', end);
 
@@ -250,7 +330,7 @@ function makeTile(link, index, layout) {
   a.className = 'tile';
   a.href = link.url || '#';
   a.title = link.title || link.url || '';
-  if (layout === 'free') a.draggable = false;
+  if (isFreeLayout(layout)) a.draggable = false;
 
   const box = document.createElement('div');
   box.className = 'tile-icon';
@@ -266,7 +346,12 @@ function makeTile(link, index, layout) {
     link.pos = pos;
     a.style.left = pos.x + 'px';
     a.style.top = pos.y + 'px';
-    makeTileDraggable(a, link);
+    makeTileDraggable(a, link, layout);
+  } else if (layout === 'freeGrid') {
+    const p = cellPos(link.cell.c, link.cell.r);
+    a.style.left = p.x + 'px';
+    a.style.top = p.y + 'px';
+    makeTileDraggable(a, link, layout);
   }
 
   fillIcon(box, link);
@@ -281,10 +366,13 @@ function applyIconSize() {
 function renderGrid() {
   const layout = config.layout || 'center';
   applyIconSize();
+
   gridEl.className = 'grid ' + layout;
   const stageEl = document.querySelector('.stage');
   if (stageEl) stageEl.classList.toggle('anchored', layout !== 'center');
   gridEl.innerHTML = '';
+
+  if (layout === 'freeGrid') assignCells();
 
   if (!config.links.length) {
     const add = document.createElement('button');
@@ -297,10 +385,10 @@ function renderGrid() {
     tip.className = 'tile-label';
     tip.textContent = '添加标签';
     add.append(plus, tip);
-    if (layout === 'free') {
-      const pos = defaultFreePos(0);
-      add.style.left = pos.x + 'px';
-      add.style.top = pos.y + 'px';
+    if (isFreeLayout(layout)) {
+      const p = layout === 'free' ? defaultFreePos(0) : cellPos(0, 0);
+      add.style.left = p.x + 'px';
+      add.style.top = p.y + 'px';
     }
     add.addEventListener('click', openDrawer);
     gridEl.appendChild(add);
