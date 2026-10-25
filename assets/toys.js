@@ -128,10 +128,9 @@ export async function createToyBox(layerEl, { count = 10 } = {}) {
       y0: ev.clientY
     };
     it.vx = it.vy = 0;
-    if (it === special) {
-      it.tsx = 1.18;
-      it.tsy = 0.58;
-    }
+    // 按住任何一条都会捏扁；只有那条特殊的会叫
+    it.tsx = 1.18;
+    it.tsy = 0.58;
     it.el.classList.add('grabbed');
     it.el.setPointerCapture?.(ev.pointerId);
   }
