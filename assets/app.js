@@ -532,14 +532,14 @@ function renderLinkList() {
     iconRow.className = 'lr-iconrow';
 
     const typeSel = document.createElement('select');
-    for (const [v, t] of [
+    for (const [val, label] of [
       ['auto', t('iconAuto')],
       ['text', t('iconText')],
       ['image', t('iconUpload')]
     ]) {
       const o = document.createElement('option');
-      o.value = v;
-      o.textContent = t;
+      o.value = val;
+      o.textContent = label;
       typeSel.appendChild(o);
     }
     typeSel.value = link.icon.type || 'auto';
