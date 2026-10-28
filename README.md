@@ -1,5 +1,15 @@
 # Blue Fat Fish 新标签页
 
+<p align="center">
+  <img src="docs/stickers/heart.gif" width="56" alt="">
+  <img src="docs/stickers/sing.gif" width="56" alt="">
+  <img src="docs/stickers/knock.gif" width="56" alt="">
+  <img src="docs/stickers/wave.gif" width="112" alt="Blue Fat Fish">
+  <img src="docs/stickers/magic.gif" width="56" alt="">
+  <img src="docs/stickers/dance.gif" width="56" alt="">
+  <img src="docs/stickers/melon.gif" width="56" alt="">
+</p>
+
 蓝色大肥鱼（DeepSeek 那只）的浏览器起始页：蓝底 + 一堆会弹跳、能被捏的鱼。
 
 纯本地：不上传任何数据，断网也能开。
@@ -31,7 +41,7 @@
 
 > Edge / Chrome 对非商店来源的 crx 有拦截，装不上就用方式一，效果一样。
 
-扩展 ID 由 `manifest.json` 里的 `key` 固定，所以从 crx 装和从文件夹装是**同一个 ID**，配置可以互通。
+用 crx 装和用文件夹装出来的扩展 ID 不同，配置互不相通（一边的标签不会自动出现在另一边）。
 
 
 ## 使用
@@ -100,3 +110,8 @@ icons/               扩展图标
 ## 许可
 
 代码采用 MIT（见 [LICENSE](LICENSE)）。表情包版权归原作者，音效来自 `dsh-whale-widget`（MIT）。
+
+<p align="center">
+  <img src="docs/stickers/pat.gif" width="96" alt="">
+  <img src="docs/stickers/like.gif" width="96" alt="">
+</p>
