@@ -24,24 +24,29 @@
 
 ## 安装
 
-从 [Releases](https://github.com/Jestions-dev/BlueFatFish/releases) 下载 `BlueFatFish-x.y.z.zip` 或 `.crx`。
+**方式一：Edge 加载项商店（推荐）**
 
-**方式一：解压加载（最稳）**
+[在 Microsoft Edge 加载项商店安装 →](https://microsoftedge.microsoft.com/addons/detail/blue-fat-fish-%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5/lelcpophjkpjdpnijiabonajapegkbjm)
 
-1. 把 zip 解压到一个不会随手删掉的位置
-2. 打开 `edge://extensions/`（Chrome 是 `chrome://extensions/`）
-3. 打开 **开发人员模式**
-4. 点 **加载解压缩的扩展**，选中解压出来的文件夹
-5. `Ctrl+T` 新开标签页
+装完直接 `Ctrl+T`。商店会负责更新，不用手动换包。
 
-**方式二：装 crx**
+**方式二：下载 zip 解压加载**（想改代码、或商店装不上时用）
+
+1. 从 [Releases](https://github.com/Jestions-dev/BlueFatFish/releases) 下载 `BlueFatFish-x.y.z.zip`
+2. 解压到一个不会随手删掉的位置
+3. 打开 `edge://extensions/`（Chrome 是 `chrome://extensions/`）
+4. 打开 **开发人员模式**
+5. 点 **加载解压缩的扩展**，选中解压出来的文件夹
+6. `Ctrl+T` 新开标签页
+
+**方式三：装 crx**
 
 1. 同样先打开 **开发人员模式**
 2. 把 `.crx` 拖进扩展页面，确认安装
 
-> Edge / Chrome 对非商店来源的 crx 有拦截，装不上就用方式一，效果一样。
+> Edge / Chrome 对非商店来源的 crx 有拦截，装不上就用方式二，效果一样。
 
-用 crx 装和用文件夹装出来的扩展 ID 不同，配置互不相通（一边的标签不会自动出现在另一边）。
+商店版、crx、解压加载三者的扩展 ID 各不相同，**配置互不相通**（一边的标签不会自动出现在另一边）。
 
 
 ## 使用
