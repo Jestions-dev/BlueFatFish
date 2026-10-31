@@ -108,7 +108,10 @@ icons/               扩展图标
 
 ## 素材
 
-- **表情包**：157 个动态表情整理自 [anka-afk/blue-fat-fish-meme-pack](https://github.com/anka-afk/blue-fat-fish-meme-pack)（AstrBot Meme Manager 的适配包）。**该仓库明确写着原作者的署名与许可"未提供，待补充"**，因此本仓库不对表情包主张任何权利，也不额外授予商业使用或再许可。如果你是权利人且不希望被使用，开一个 issue，会在下个版本里移除。
+- **表情包**：由 B 站 UP 主 **赤风RED** 于 2026-08-18 制作并免费分享，共 157 张动态表情，使用表情制作工具 EmoteLab（Steam 上有）生成。本仓库把它们转成 WebP、缩到 160px，作为玩具箱的素材。
+  - 原始发布只写了"免费获取"，**没有附带明确的使用许可**。因此本仓库不对表情包主张任何权利，也不额外授予商业使用或再许可权利。
+  - 同批素材的 AstrBot 适配包在 [anka-afk/blue-fat-fish-meme-pack](https://github.com/anka-afk/blue-fat-fish-meme-pack)，其 LICENSE 同样注明"原作者许可未提供"。
+  - 如果你是作者或权利人，不希望被这样使用：开一个 issue，会在下个版本里移除，不需要理由。
 - **小黄鸭音效**：来自 `dsh-whale-widget`（MIT）。
 - **扩展图标**：由「打招呼」表情裁切生成。
 
