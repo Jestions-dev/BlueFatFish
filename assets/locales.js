@@ -1,6 +1,5 @@
 // 自动生成，请勿手改。
 // 来源：_locales/en/messages.json 与 _locales/zh_CN/messages.json
-// 重新生成：见 README 的说明（改完 messages.json 后跑一次生成脚本）
 
 export const CATALOGS = {
   en: {
@@ -33,7 +32,7 @@ export const CATALOGS = {
     "links": "Shortcuts",
     "addLink": "+ Add shortcut",
     "refreshIcons": "Refresh icons",
-    "footer": "Blue Fat Fish · Local",
+    "footer": "Blue Fat Fish · Local · Art by RED Chifeng (bilibili)",
     "curToy": "Current: toy box (blue + fish)",
     "curLocalImage": "Current: local image",
     "curLocalVideo": "Current: local video",
@@ -105,7 +104,7 @@ export const CATALOGS = {
     "links": "标签",
     "addLink": "+ 添加标签",
     "refreshIcons": "重新抓图标",
-    "footer": "Blue Fat Fish · 本地版",
+    "footer": "Blue Fat Fish · 本地版 · 表情：赤风RED（B站）",
     "curToy": "当前：玩具箱（蓝色 + 大肥鱼）",
     "curLocalImage": "当前：本地上传的图片",
     "curLocalVideo": "当前：本地上传的视频",
