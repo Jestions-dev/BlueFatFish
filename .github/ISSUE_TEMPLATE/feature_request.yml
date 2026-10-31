@@ -1,0 +1,37 @@
+name: 功能建议
+description: 想要什么功能，或者觉得哪里不好用
+title: "[建议] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提之前先说清楚一件事：这个扩展刻意保持**无依赖、无构建、纯本地**。
+        需要引入框架、后端、账号体系的功能，大概率不会做。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 你遇到的不便
+      description: 先说场景，再说方案。例如"我每天要开五个内部系统，现在得一个个点"
+      placeholder: 描述你现在怎么用的、哪里别扭
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: 你设想的做法
+      description: 有具体想法就写，没有也没关系
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: 自查
+      options:
+        - label: 这个功能不需要联网或后端服务
+          required: false
+        - label: 如果实现它，我愿意自己提 PR
+          required: false

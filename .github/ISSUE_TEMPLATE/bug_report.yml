@@ -1,0 +1,79 @@
+name: 报告问题
+description: 装不上、显示不对、有报错，都在这里说
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        三样信息决定了这个问题能不能被定位：**浏览器版本**、**怎么装的**、**怎么复现**。
+        缺了它们，我大概率只能回一句"我这边复现不了"。
+
+  - type: input
+    id: browser
+    attributes:
+      label: 浏览器与版本
+      description: Edge / Chrome 具体版本号（`edge://version` 里能看到）
+      placeholder: 例如 Edge 142.0.3595.53
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: 安装方式
+      options:
+        - Edge 加载项商店
+        - 下载 zip 解压加载
+        - 安装 crx
+        - 直接改代码跑的版本
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: 扩展版本
+      description: 设置面板底部能看到，或 `edge://extensions` 里的版本号
+      placeholder: 例如 0.6.3
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: 出了什么问题
+      description: 实际看到的是什么，你预期是什么
+      placeholder: 打开新标签页后，图标全是灰方块，预期是站点图标
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 从打开浏览器到出问题，一步步写
+      placeholder: |
+        1. 打开新标签页
+        2. 点右下角齿轮
+        3. 添加标签 https://example.com
+        4. 图标位置显示为灰方块
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: 控制台报错（可选）
+      description: 新标签页上按 F12 → Console，把红色报错贴进来。这一步往往能直接定位问题。
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 截图 / 补充（可选）
+      description: 直接把图片拖进这个框
+    validations:
+      required: false

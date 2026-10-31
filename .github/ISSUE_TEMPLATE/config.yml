@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 安全问题请走私密通道
+    url: https://github.com/Jestions-dev/BlueFatFish/security/advisories/new
+    about: 涉及到权限、越权或数据安全的问题，请用私密报告，不要开公开 issue
+  - name: 装不上？先看安装说明
+    url: https://github.com/Jestions-dev/BlueFatFish#安装
+    about: 商店、zip、crx 三种装法的差别，以及常见拦截情况
