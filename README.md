@@ -108,13 +108,13 @@ icons/               扩展图标
 
 ## 素材
 
-- 表情包：外部作者绘制，作者声明免费可商用，感谢。
-- 小黄鸭音效：来自 `dsh-whale-widget`（MIT）。
-- 扩展图标：由「打招呼」表情裁切生成。
+- **表情包**：157 个动态表情整理自 [anka-afk/blue-fat-fish-meme-pack](https://github.com/anka-afk/blue-fat-fish-meme-pack)（AstrBot Meme Manager 的适配包）。**该仓库明确写着原作者的署名与许可"未提供，待补充"**，因此本仓库不对表情包主张任何权利，也不额外授予商业使用或再许可。如果你是权利人且不希望被使用，开一个 issue，会在下个版本里移除。
+- **小黄鸭音效**：来自 `dsh-whale-widget`（MIT）。
+- **扩展图标**：由「打招呼」表情裁切生成。
 
 ## 许可
 
-代码采用 MIT（见 [LICENSE](LICENSE)）。表情包版权归原作者，音效来自 `dsh-whale-widget`（MIT）。
+代码采用 MIT（见 [LICENSE](LICENSE)），仅覆盖代码，不覆盖表情素材。表情包版权归原作者，本仓库不主张其权利；音效来自 `dsh-whale-widget`（MIT）。
 
 <p align="center">
   <img src="docs/stickers/pat.gif" width="96" alt="">
